@@ -45,17 +45,23 @@
 
 	// DANH MUC HE THONG
 	// {
-	// 	name: 'DanhMuc',
-	// 	path: '/danh-muc',
+	// 	name: 'Sản Phẩm',
+	// 	path: '/products',
 	// 	icon: 'copy',
 	// 	routes: [
 	// 		{
 	// 			name: 'ChucVu',
 	// 			path: 'chuc-vu',
-	// 			component: './DanhMuc/ChucVu',
+	// 			component: './pages/products/index',
 	// 		},
 	// 	],
 	// },
+	{
+    name: 'Quản lý sản phẩm', 
+    path: '/products',        
+    component: './products',  
+    icon: 'table',            
+  },
 
 	{
 		path: '/notification',
@@ -75,7 +81,13 @@
 				exact: true,
 				component: './ThongBao/NotifOneSignal',
 			},
+			{
+				path: './',
+				exact: true,
+				component: './ThongBao/NotifOneSignal',
+			},
 		],
+
 		layout: false,
 		hideInMenu: true,
 	},
