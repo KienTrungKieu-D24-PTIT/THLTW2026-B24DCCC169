@@ -62,6 +62,22 @@
     component: './products',  
     icon: 'table',            
   },
+  // --- BÀI TẬP LỚN (BT01) ---
+    // Gom vào một menu cha để dễ quản lý
+    {
+        name: 'Quản lý kho', // Tên menu cha
+        path: '/products',
+        icon: 'table',
+        routes: [
+            {
+                name: 'Danh sách sản phẩm', // Tên menu con
+                path: '/products',          // Đường dẫn trùng cha để mặc định vào đây
+                component: './products',    // Trỏ tới folder src/pages/products
+                exact: true,
+            },
+            // Sau này bạn có thể thêm các menu con khác vào đây (VD: Danh mục, Nhập kho...)
+        ],
+    },
 
 	{
 		path: '/notification',

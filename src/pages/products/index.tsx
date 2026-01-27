@@ -1,96 +1,65 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Input, InputNumber, Popconfirm, message, Space } from 'antd';
+import React, { useState } from 'react';
+import { Table, Button, Modal, Form, Input, InputNumber, Popconfirm, message } from 'antd';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-
-// 1. Define Data Type
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-}
-
-// 2. Initial Mock Data [cite: 28-33]
-const initialData: Product[] = [
-  { id: 1, name: 'Laptop Dell XPS 13', price: 25000000, quantity: 10 },
-  { id: 2, name: 'iPhone 15 Pro Max', price: 30000000, quantity: 15 },
-  { id: 3, name: 'Samsung Galaxy S24', price: 22000000, quantity: 20 },
-  { id: 4, name: 'iPad Air M2', price: 18000000, quantity: 12 },
-  { id: 5, name: 'MacBook Air M3', price: 28000000, quantity: 8 },
-];
+// Import useModel từ umi
+import { useModel } from 'umi'; 
 
 const ProductManager: React.FC = () => {
-  // State Management [cite: 26]
-  const [products, setProducts] = useState<Product[]>(initialData);
+  // 1. Gọi dữ liệu từ Model 'BT01.sanpham'
+  // Lưu ý: Namespace thường là tên thư mục + tên file. 
+  // Nếu namespace 'BT01.sanpham' không chạy, hãy thử đổi thành 'sanpham'
+  const { products, addProduct, deleteProduct } = useModel('BT01.sanpham');
+
+  // State UI (chỉ dùng cho giao diện, không cần đưa vào model)
   const [searchText, setSearchText] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
 
-  // 3. Search Logic (Realtime) 
-  // Filter products based on search text (case insensitive) [cite: 22]
+  // Logic tìm kiếm (vẫn giữ ở client để render nhanh)
   const filteredProducts = products.filter((item) =>
     item.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
-  // 4. Handle Add Product
+  // Xử lý thêm mới
   const handleAdd = (values: any) => {
-    const newProduct: Product = {
-      id: Date.now(), // Generate a temporary unique ID
+    const newProduct = {
+      id: Date.now(),
       name: values.name,
       price: values.price,
       quantity: values.quantity,
     };
     
-    setProducts([...products, newProduct]);
-    message.success('Thêm sản phẩm thành công'); 
+    // Gọi hàm từ model
+    addProduct(newProduct);
+    
+    message.success('Thêm sản phẩm thành công');
     setIsModalOpen(false);
     form.resetFields();
   };
 
-  // 5. Handle Delete Product
+  const bienthamchieuForm = Form.useForm
+  // Xử lý xóa
   const handleDelete = (id: number) => {
-    const newProductList = products.filter((item) => item.id !== id);
-    setProducts(newProductList);
-    message.success('Xóa sản phẩm thành công'); 
+    // Gọi hàm từ model
+    deleteProduct(id);
+    message.success('Xóa sản phẩm thành công');
   };
 
-  // 6. Table Columns [cite: 6]
+  // ... (Phần Columns và Return giữ nguyên như cũ)
   const columns = [
-    {
-      title: 'STT',
-      key: 'index',
-      render: (_: any, __: any, index: number) => index + 1,
-    },
-    {
-      title: 'Tên sản phẩm',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Giá',
-      dataIndex: 'price',
-      key: 'price',
-      render: (text: number) => `${text.toLocaleString()} VND`,
-    },
-    {
-      title: 'Số lượng',
-      dataIndex: 'quantity',
-      key: 'quantity',
-    },
+    { title: 'STT', key: 'index', render: (_: any, __: any, index: number) => index + 1 },
+    { title: 'Tên sản phẩm', dataIndex: 'name', key: 'name' },
+    { title: 'Giá', dataIndex: 'price', key: 'price', render: (text: number) => `${text?.toLocaleString()} VND` },
+    { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
     {
       title: 'Thao tác',
       key: 'action',
-      render: (_: any, record: Product) => (
-        <Popconfirm
-          title="Bạn có chắc chắn muốn xóa?"
-          onConfirm={() => handleDelete(record.id)}
-          okText="Có"
-          cancelText="Không"
-        >
-          {/* [cite: 17, 18] */}
-          <Button danger icon={<DeleteOutlined />}>
-            Xóa
-          </Button>
+      render: (_: any, record: any) => (
+        <Popconfirm title="Xóa?"
+         onConfirm={() => handleDelete(record.id)} //tao bien 
+         okText="Có" 
+         cancelText="Không">
+          <Button danger icon={<DeleteOutlined />}>Xóa</Button>
         </Popconfirm>
       ),
     },
@@ -98,13 +67,10 @@ const ProductManager: React.FC = () => {
 
   return (
     <div style={{ padding: 20 }}>
-      <h2>Danh sách sản phẩm</h2>
-      
-      {/* Search and Add Bar */}
+      <h2>Danh sách sản phẩm (Dữ liệu từ Model)</h2>
       <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between' }}>
-        {/* [cite: 21] */}
         <Input.Search
-          placeholder="Tìm kiếm sản phẩm..."
+          placeholder="Tìm kiếm..."
           onChange={(e) => setSearchText(e.target.value)}
           style={{ width: 300 }}
           allowClear
@@ -114,52 +80,35 @@ const ProductManager: React.FC = () => {
         </Button>
       </div>
 
-      {/* Product Table [cite: 5] */}
-      <Table 
-        dataSource={filteredProducts} 
-        columns={columns} 
-        rowKey="id" 
-        pagination={{ pageSize: 5 }}
-      />
+      <Table dataSource={filteredProducts} columns={columns} rowKey="id" />
 
-      {/* Add Product Modal [cite: 9] */}
       <Modal
         title="Thêm sản phẩm mới"
-        visible={isModalOpen}
+        visible={isModalOpen} // Dùng visible cho antd v4
         onCancel={() => setIsModalOpen(false)}
         onOk={() => form.submit()}
       >
-        <Form form={form} layout="vertical" onFinish={handleAdd}>
-          {/* Validation Rules [cite: 11-14] */}
-          <Form.Item
-            name="name"
-            label="Tên sản phẩm"
-            rules={[{ required: true, message: 'Vui lòng nhập tên sản phẩm!' }]}
-          >
-            <Input placeholder="Nhập tên sản phẩm" />
+        <Form form={form} 
+         layout="vertical" 
+         onFinish={handleAdd}>
+
+          <Form.Item name="name"
+           label="Tên sản phẩm" 
+           rules={[{ required: true }]}>
+             <Input />
           </Form.Item>
 
-          <Form.Item
-            name="price"
-            label="Giá"
-            rules={[
-              { required: true, message: 'Vui lòng nhập giá!' },
-              { type: 'number', min: 1, message: 'Giá phải là số dương!' } // [cite: 13]
-            ]}
-          >
-            <InputNumber style={{ width: '100%' }} placeholder="Nhập giá" formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}/>
+          <Form.Item name="price" label="Giá" 
+          rules={[{ required: true }]}>
+             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
 
-          <Form.Item
-            name="quantity"
-            label="Số lượng"
-            rules={[
-              { required: true, message: 'Vui lòng nhập số lượng!' },
-              { type: 'number', min: 1, message: 'Số lượng phải là số nguyên dương!' } // [cite: 14]
-            ]}
-          >
-            <InputNumber style={{ width: '100%' }} placeholder="Nhập số lượng" />
+          <Form.Item name="quantity" 
+          label="Số lượng" 
+          rules={[{ required: true }]}>
+            <InputNumber style={{ width: '100%' }} />
           </Form.Item>
+
         </Form>
       </Modal>
     </div>

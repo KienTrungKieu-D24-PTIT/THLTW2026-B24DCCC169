@@ -1,3 +1,4 @@
+// check values input (da duoc tao san)
 import moment from 'moment';
 import _ from 'lodash';
 import { trim, removeHtmlTags, urlRegex } from '@/utils/utils';
