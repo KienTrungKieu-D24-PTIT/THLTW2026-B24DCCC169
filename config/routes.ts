@@ -57,11 +57,20 @@
 	// 	],
 	// },
 	{
-    name: 'Quản lý sản phẩm', 
-    path: '/products',        
-    component: './products',  
-    icon: 'table',            
-  },
+		path: '/bai-tap-th01',
+		name: 'Bài tập TH01',
+		icon: 'smile',
+		routes: [
+			{ path: '/bai-tap-th01/bt1', name: 'Bài 1: Đoán số', component: './BT1' },
+			{ path: '/bai-tap-th01/bt2', name: 'Bài 2: Quản lý học tập', component: './BT2' },
+		],
+	},
+	{
+		name: 'Quản lý sản phẩm',
+		path: '/products',
+		component: './products',
+		icon: 'table',
+	},
 
 	{
 		path: '/notification',
