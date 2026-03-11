@@ -57,12 +57,12 @@
 	// 	],
 	// },
 	{
-		path: '/bai-tap-th01',
-		name: 'Bài tập TH01',
-		icon: 'smile',
+		path: '/th02',
+		name: 'Bài tập TH02',
+		icon: 'edit',
 		routes: [
-			{ path: '/bai-tap-th01/bt1', name: 'Bài 1: Đoán số', component: './BT1' },
-			{ path: '/bai-tap-th01/bt2', name: 'Bài 2: Quản lý học tập', component: './BT2' },
+			{ path: '/th02/bt1', name: 'Oẳn Tù Tì', component: './BT1' },
+			{ path: '/th02/bt2', name: 'Ngân hàng đề thi', component: './BT2' },
 		],
 	},
 	{
