@@ -56,6 +56,12 @@
 	// 		},
 	// 	],
 	// },
+	{
+		path: '/th03',
+		name: 'Bài tập TH03',
+		icon: 'calendar',
+		component: './TH03',
+	},
 
 	{
 		path: '/notification',
