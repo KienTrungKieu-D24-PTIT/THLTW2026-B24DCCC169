@@ -57,10 +57,10 @@
 	// 	],
 	// },
 	{
-		path: '/th05',
-		name: 'Bài tập TH05',
+		path: '/th06',
+		name: 'Bài tập TH06',
 		icon: 'calendar',
-		component: './TH05',
+		component: './TH06',
 	},
 
 	{
