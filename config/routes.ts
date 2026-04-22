@@ -57,10 +57,10 @@
 	// 	],
 	// },
 	{
-		path: '/KTGK',
-		name: 'KTGK',
+		path: '/TH07',
+		name: 'TH07',
 		icon: 'calendar',
-		component: './KTGK',
+		component: './TH07',
 	},
 
 	{
