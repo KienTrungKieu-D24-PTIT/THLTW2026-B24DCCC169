@@ -57,10 +57,10 @@
 	// 	],
 	// },
 	{
-		path: '/TH07',
-		name: 'TH07',
+		path: '/TH09',
+		name: 'TH09',
 		icon: 'calendar',
-		component: './TH07',
+		component: './TH09',
 	},
 
 	{
